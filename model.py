@@ -109,5 +109,6 @@ def build_DLV3SA(shape):
     return model
 
 
-
+if __name__ == "__main__":
+    model = build_DLV3SA((256, 256, 3))
 
