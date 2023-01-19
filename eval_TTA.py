@@ -36,3 +36,15 @@ def read_mask(path):
     x = x/255.0
     x = x.astype(np.int32)                    ## (256, 256)
     return ori_x, x
+
+def save_results(ori_x, ori_y, y_pred, save_image_path):
+    line = np.ones((H, 10, 3)) * 255
+
+    ori_y = np.expand_dims(ori_y, axis=-1)  ## (256, 256, 1)
+    ori_y = np.concatenate([ori_y, ori_y, ori_y], axis=-1) ## (256, 256, 3)
+
+    y_pred = np.expand_dims(y_pred, axis=-1)  ## (256, 256, 1)
+    y_pred = np.concatenate([y_pred, y_pred, y_pred], axis=-1) ## (256, 256, 3)
+
+    cat_images = np.concatenate([ori_x, line, ori_y, line, y_pred*255], axis=1)
+    cv2.imwrite(save_image_path, cat_images)
