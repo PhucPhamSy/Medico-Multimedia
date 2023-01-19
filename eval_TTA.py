@@ -48,3 +48,29 @@ def save_results(ori_x, ori_y, y_pred, save_image_path):
 
     cat_images = np.concatenate([ori_x, line, ori_y, line, y_pred*255], axis=1)
     cv2.imwrite(save_image_path, cat_images)
+    
+    
+if __name__ == "__main__":
+    """ Seeding """
+    np.random.seed(42)
+    tf.random.set_seed(42)
+
+    """ Folder for saving results """
+    create_dir("results_DLV3SA_inception")
+
+    """ Load the model """
+    with CustomObjectScope({'iou': iou, 'dice_coef': dice_coef}):
+        model = tf.keras.models.load_model("files_DLV3SA/model_DLV3SA_inception.h5")
+
+    """ Load the test data """
+    dataset_path = "D:/medical_challenge/segmentation/CVC-612/data/"
+    # dataset_path = "D:/medical_challenge/segmentation/2d/VIP_CUP_5fold/fold_1/train/"
+    # dataset_path = "D:/medical_challenge/segmentation/CVC-612/CVC_ClinicDB"
+    # dataset_path = "D:/medical_challenge/segmentation/2d/data_mbrain_5fold/fold_0/train/"
+    (train_x, train_y), (valid_x, valid_y) = load_data(dataset_path)
+    # print(len(test_x), len(test_y))
+    print("=====================================================================================================")
+    print(len(valid_x), len(valid_y))
+    print("=====================================================================================================")
+    print(len(train_x), len(train_y))
+    SCORE = []
