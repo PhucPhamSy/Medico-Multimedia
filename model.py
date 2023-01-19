@@ -85,4 +85,29 @@ def build_DLV3SA(shape):
     x = Concatenate()([x_a, x_b])
     # x = Concatenate()([cr_a_b, cr_b_a])
     x = SqueezeAndExcite(x)
+    
+    x = Concatenate()([x_a, x_b])
+    # x = Concatenate()([cr_a_b, cr_b_a])
+    x = SqueezeAndExcite(x)
+
+
+    x = Conv2D(filters=256, kernel_size=3, padding='same', use_bias=False)(x)
+    x = BatchNormalization()(x)
+    x = Activation('relu')(x)
+
+    x = Conv2D(filters=256, kernel_size=3, padding='same', use_bias=False)(x)
+    x = BatchNormalization()(x)
+    x = Activation('relu')(x)
+    # x = Attention()([x, x])
+    x = SqueezeAndExcite(x)
+
+    x = UpSampling2D((4, 4), interpolation="bilinear")(x)
+    x = Conv2D(1, 1)(x)
+    x = Activation("sigmoid")(x)
+
+    model = Model(inputs, x)
+    return model
+
+
+
 
